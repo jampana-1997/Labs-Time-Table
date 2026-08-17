@@ -18,6 +18,56 @@
 body{
     background:#f4f7fb;
     color:#111827;
+    transition:.25s;
+}
+
+/* ================= DARK MODE ================= */
+
+body.dark{
+    background:#111827;
+    color:#f9fafb;
+}
+
+body.dark .controls,
+body.dark .card,
+body.dark .info,
+body.dark .table-container{
+    background:#1f2937;
+    color:#f9fafb;
+}
+
+body.dark .controls-title,
+body.dark .filter-box label{
+    color:#f9fafb;
+}
+
+body.dark select{
+    background:#374151;
+    color:white;
+    border-color:#4b5563;
+}
+
+body.dark .status,
+body.dark .last-updated{
+    color:#d1d5db;
+}
+
+body.dark .normal{
+    background:#1f2937;
+    color:#f9fafb !important;
+}
+
+body.dark td{
+    border-color:#374151;
+}
+
+body.dark .legend-other{
+    background:#374151;
+    border-color:#6b7280;
+}
+
+body.dark .footer{
+    color:#9ca3af;
 }
 
 /* ================= HEADER ================= */
@@ -26,7 +76,8 @@ body{
     background:#123c69;
     color:white;
     text-align:center;
-    padding:25px 15px;
+    padding:20px 15px;
+    position:relative;
 }
 
 .header h1{
@@ -43,6 +94,29 @@ body{
 .header p{
     font-size:14px;
     opacity:.9;
+}
+
+/* ================= THEME BUTTON ================= */
+
+.theme-btn{
+    position:absolute;
+    right:20px;
+    top:20px;
+
+    border:none;
+    background:white;
+    color:#123c69;
+
+    padding:9px 14px;
+    border-radius:20px;
+
+    cursor:pointer;
+    font-weight:bold;
+    font-size:13px;
+}
+
+.theme-btn:hover{
+    background:#e5e7eb;
 }
 
 /* ================= MAIN ================= */
@@ -76,6 +150,10 @@ body{
     margin-bottom:8px;
 }
 
+body.dark .card-title{
+    color:#d1d5db;
+}
+
 .card-number{
     font-size:30px;
     font-weight:bold;
@@ -83,6 +161,10 @@ body{
 
 .total-number{
     color:#123c69;
+}
+
+body.dark .total-number{
+    color:#60a5fa;
 }
 
 .free-number{
@@ -160,6 +242,7 @@ select:focus{
 .reset-btn{
     background:#374151;
     color:white;
+    width:100%;
 }
 
 .reset-btn:hover{
@@ -171,17 +254,9 @@ select:focus{
     color:white;
 }
 
-.print-btn:hover{
-    background:#0b2948;
-}
-
 .excel-btn{
     background:#15803d;
     color:white;
-}
-
-.excel-btn:hover{
-    background:#166534;
 }
 
 /* ================= LEGEND ================= */
@@ -246,6 +321,11 @@ select:focus{
 .selected-period{
     font-weight:bold;
     color:#123c69;
+    margin-top:4px;
+}
+
+body.dark .selected-period{
+    color:#60a5fa;
 }
 
 .last-updated{
@@ -288,7 +368,7 @@ td{
     font-size:13px;
 }
 
-/* ================= CELL COLORS ================= */
+/* ================= COLORS ================= */
 
 .free{
     color:#15803d !important;
@@ -313,6 +393,10 @@ td{
     text-align:center;
     padding:40px;
     color:#6b7280;
+}
+
+body.dark .loading{
+    color:#d1d5db;
 }
 
 /* ================= ERROR ================= */
@@ -342,13 +426,13 @@ td{
         grid-template-columns:repeat(2,1fr);
     }
 
-    .dashboard{
-        grid-template-columns:repeat(3,1fr);
-    }
-
 }
 
 @media(max-width:650px){
+
+    .header{
+        padding-top:65px;
+    }
 
     .header h1{
         font-size:21px;
@@ -356,6 +440,11 @@ td{
 
     .header h2{
         font-size:15px;
+    }
+
+    .theme-btn{
+        top:15px;
+        right:15px;
     }
 
     .dashboard{
@@ -380,11 +469,17 @@ td{
 <body>
 
 
-<!-- =====================================================
-     HEADER
-===================================================== -->
+<!-- ================= HEADER ================= -->
 
 <div class="header">
+
+    <button
+        class="theme-btn"
+        id="themeButton"
+        onclick="toggleTheme()"
+    >
+        🌙 Dark
+    </button>
 
     <h1>
         Mahatma Gandhi Institute of Technology
@@ -404,9 +499,7 @@ td{
 <div class="container">
 
 
-<!-- =====================================================
-     DASHBOARD CARDS
-===================================================== -->
+<!-- ================= DASHBOARD ================= -->
 
 <div class="dashboard">
 
@@ -460,9 +553,7 @@ td{
 </div>
 
 
-<!-- =====================================================
-     FILTERS
-===================================================== -->
+<!-- ================= FILTERS ================= -->
 
 <div class="controls">
 
@@ -478,9 +569,7 @@ td{
 
         <div class="filter-box">
 
-            <label>
-                Day
-            </label>
+            <label>Day</label>
 
             <select id="dayFilter">
 
@@ -497,9 +586,7 @@ td{
 
         <div class="filter-box">
 
-            <label>
-                Room No.
-            </label>
+            <label>Room No.</label>
 
             <select id="roomFilter">
 
@@ -512,18 +599,32 @@ td{
         </div>
 
 
-        <!-- CAPACITY -->
+        <!-- CAPACITY RANGE -->
 
         <div class="filter-box">
 
-            <label>
-                Lab Capacity
-            </label>
+            <label>Lab Capacity</label>
 
             <select id="capacityFilter">
 
                 <option value="ALL">
                     All Lab Capacities
+                </option>
+
+                <option value="BELOW_60">
+                    Below 60
+                </option>
+
+                <option value="60_80">
+                    60 - 80
+                </option>
+
+                <option value="81_100">
+                    81 - 100
+                </option>
+
+                <option value="ABOVE_100">
+                    Above 100
                 </option>
 
             </select>
@@ -535,9 +636,7 @@ td{
 
         <div class="filter-box">
 
-            <label>
-                Select Period
-            </label>
+            <label>Select Period</label>
 
             <select id="periodFilter">
 
@@ -554,13 +653,10 @@ td{
 
         <div class="filter-box">
 
-            <label>
-                &nbsp;
-            </label>
+            <label>&nbsp;</label>
 
             <button
                 class="btn reset-btn"
-                style="width:100%;"
                 onclick="resetFilters()"
             >
                 RESET
@@ -595,9 +691,7 @@ td{
 </div>
 
 
-<!-- =====================================================
-     LEGEND
-===================================================== -->
+<!-- ================= LEGEND ================= -->
 
 <div class="legend">
 
@@ -630,9 +724,7 @@ td{
 </div>
 
 
-<!-- =====================================================
-     INFO
-===================================================== -->
+<!-- ================= INFO ================= -->
 
 <div class="info">
 
@@ -665,20 +757,15 @@ td{
 </div>
 
 
-<!-- =====================================================
-     TABLE
-===================================================== -->
+<!-- ================= TABLE ================= -->
 
 <div class="table-container">
-
 
     <div
         id="loading"
         class="loading"
     >
-
         Loading data from Google Sheets...
-
     </div>
 
 
@@ -699,10 +786,6 @@ td{
 </div>
 
 
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
 <div class="footer">
 
     Mahatma Gandhi Institute of Technology |
@@ -714,21 +797,14 @@ td{
 <script>
 
 /* =====================================================
-   GOOGLE SHEET CONFIGURATION
+   GOOGLE SHEET
 ===================================================== */
 
 const SHEET_ID =
 "1PNgEr74LPmWGHzorRV_qvBhbc8sxhEFDjt3gjBtaFOY";
 
-
-/*
-   If your Google Sheet tab name is different,
-   change Sheet1 here.
-*/
-
 const SHEET_NAME =
 "Sheet1";
-
 
 const GOOGLE_URL =
 "https://docs.google.com/spreadsheets/d/" +
@@ -738,7 +814,7 @@ encodeURIComponent(SHEET_NAME);
 
 
 /* =====================================================
-   GLOBAL DATA
+   GLOBAL
 ===================================================== */
 
 let allData = [];
@@ -749,7 +825,34 @@ let currentData = [];
 
 
 /* =====================================================
-   LOAD SHEET
+   THEME
+===================================================== */
+
+function toggleTheme(){
+
+    document.body.classList.toggle(
+        "dark"
+    );
+
+
+    const dark =
+        document.body.classList.contains(
+            "dark"
+        );
+
+
+    document.getElementById(
+        "themeButton"
+    ).innerText =
+        dark
+        ? "☀️ Light"
+        : "🌙 Dark";
+
+}
+
+
+/* =====================================================
+   LOAD GOOGLE SHEET
 ===================================================== */
 
 async function loadSheet(){
@@ -757,7 +860,9 @@ async function loadSheet(){
     try{
 
         const response =
-            await fetch(GOOGLE_URL);
+            await fetch(
+                GOOGLE_URL
+            );
 
 
         if(!response.ok){
@@ -788,15 +893,11 @@ async function loadSheet(){
             json.table;
 
 
-        /* ================= HEADERS ================= */
-
         headers =
             table.cols.map(
                 col => col.label || ""
             );
 
-
-        /* ================= DATA ================= */
 
         allData =
             table.rows.map(row => {
@@ -804,9 +905,7 @@ async function loadSheet(){
                 return row.c.map(cell => {
 
                     if(cell === null){
-
                         return "";
-
                     }
 
                     return (
@@ -820,10 +919,6 @@ async function loadSheet(){
             });
 
 
-        /*
-           Remove empty rows
-        */
-
         allData =
             allData.filter(row =>
                 row.some(value =>
@@ -832,27 +927,17 @@ async function loadSheet(){
             );
 
 
-        /*
-           Setup filters
-        */
-
         setupFilters();
 
-
-        /*
-           Display all data
-        */
 
         currentData =
             allData;
 
 
-        displayData(allData);
+        displayData(
+            allData
+        );
 
-
-        /*
-           Show table
-        */
 
         document.getElementById(
             "loading"
@@ -865,10 +950,6 @@ async function loadSheet(){
         ).style.display =
             "table";
 
-
-        /*
-           Updated time
-        */
 
         document.getElementById(
             "lastUpdated"
@@ -883,13 +964,11 @@ async function loadSheet(){
             allData.length +
             " lab records loaded";
 
-
     }
 
     catch(error){
 
         console.error(error);
-
 
         document.getElementById(
             "loading"
@@ -907,15 +986,13 @@ async function loadSheet(){
 
                 <br><br>
 
-                1. Google Sheet is public
+                Google Sheet →
+                Anyone with the link →
+                Viewer
 
-                <br>
+                <br><br>
 
-                2. Anyone with the link → Viewer
-
-                <br>
-
-                3. Sheet tab name is correct
+                Also check the Sheet tab name.
 
             </div>
 
@@ -932,7 +1009,6 @@ async function loadSheet(){
 
 function setupFilters(){
 
-
     const dayFilter =
         document.getElementById(
             "dayFilter"
@@ -945,19 +1021,13 @@ function setupFilters(){
         );
 
 
-    const capacityFilter =
-        document.getElementById(
-            "capacityFilter"
-        );
-
-
     const periodFilter =
         document.getElementById(
             "periodFilter"
         );
 
 
-    /* ================= DAY ================= */
+    /* DAY */
 
     const dayIndex =
         findColumn([
@@ -969,8 +1039,9 @@ function setupFilters(){
 
     if(dayIndex !== -1){
 
-        uniqueValues(dayIndex)
-        .forEach(day => {
+        uniqueValues(
+            dayIndex
+        ).forEach(day => {
 
             const option =
                 document.createElement(
@@ -992,7 +1063,7 @@ function setupFilters(){
     }
 
 
-    /* ================= ROOM ================= */
+    /* ROOM */
 
     const roomIndex =
         findColumn([
@@ -1006,8 +1077,9 @@ function setupFilters(){
 
     if(roomIndex !== -1){
 
-        uniqueValues(roomIndex)
-        .forEach(room => {
+        uniqueValues(
+            roomIndex
+        ).forEach(room => {
 
             const option =
                 document.createElement(
@@ -1029,55 +1101,7 @@ function setupFilters(){
     }
 
 
-    /* ================= CAPACITY ================= */
-
-    const capacityIndex =
-        findColumn([
-            "Capacity",
-            "Lab Capacity",
-            "CAPACITY"
-        ]);
-
-
-    if(capacityIndex !== -1){
-
-        let capacities =
-            uniqueValues(
-                capacityIndex
-            );
-
-
-        capacities.sort(
-            (a,b) =>
-                Number(a) - Number(b)
-        );
-
-
-        capacities.forEach(
-            capacity => {
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-                option.value =
-                    capacity;
-
-                option.textContent =
-                    capacity;
-
-                capacityFilter.appendChild(
-                    option
-                );
-
-            }
-        );
-
-    }
-
-
-    /* ================= PERIOD ================= */
+    /* PERIOD */
 
     headers.forEach(header => {
 
@@ -1085,7 +1109,11 @@ function setupFilters(){
             String(header).trim();
 
 
-        if(isPeriod(cleanHeader)){
+        if(
+            isPeriod(
+                cleanHeader
+            )
+        ){
 
             const option =
                 document.createElement(
@@ -1107,7 +1135,7 @@ function setupFilters(){
     });
 
 
-    /* ================= EVENTS ================= */
+    /* EVENTS */
 
     dayFilter.addEventListener(
         "change",
@@ -1121,7 +1149,9 @@ function setupFilters(){
     );
 
 
-    capacityFilter.addEventListener(
+    document.getElementById(
+        "capacityFilter"
+    ).addEventListener(
         "change",
         applyFilters
     );
@@ -1142,7 +1172,9 @@ function setupFilters(){
 function isPeriod(header){
 
     const h =
-        normalize(header);
+        normalize(
+            header
+        );
 
 
     return (
@@ -1167,7 +1199,7 @@ function isPeriod(header){
 
 
 /* =====================================================
-   DISPLAY DATA
+   DISPLAY
 ===================================================== */
 
 function displayData(data){
@@ -1192,8 +1224,6 @@ function displayData(data){
 
     tableBody.innerHTML = "";
 
-
-    /* ================= HEADER ================= */
 
     const headRow =
         document.createElement(
@@ -1223,8 +1253,6 @@ function displayData(data){
     );
 
 
-    /* ================= SORT FREE FIRST ================= */
-
     const selectedPeriod =
         document.getElementById(
             "periodFilter"
@@ -1235,7 +1263,13 @@ function displayData(data){
         [...data];
 
 
-    if(selectedPeriod !== "ALL"){
+    /*
+       FREE FIRST
+    */
+
+    if(
+        selectedPeriod !== "ALL"
+    ){
 
         const periodIndex =
             findExactColumn(
@@ -1259,13 +1293,19 @@ function displayData(data){
                         );
 
 
-                    if(af && !bf){
+                    if(
+                        af && !bf
+                    ){
                         return -1;
                     }
 
-                    if(!af && bf){
+
+                    if(
+                        !af && bf
+                    ){
                         return 1;
                     }
+
 
                     return 0;
 
@@ -1276,8 +1316,6 @@ function displayData(data){
 
     }
 
-
-    /* ================= BODY ================= */
 
     sortedData.forEach(row => {
 
@@ -1304,9 +1342,9 @@ function displayData(data){
                     value;
 
 
-                /* FREE */
-
-                if(isFree(value)){
+                if(
+                    isFree(value)
+                ){
 
                     td.classList.add(
                         "free"
@@ -1314,17 +1352,15 @@ function displayData(data){
 
                 }
 
-                /* FULL */
-
-                else if(isFull(value)){
+                else if(
+                    isFull(value)
+                ){
 
                     td.classList.add(
                         "full"
                     );
 
                 }
-
-                /* OTHER */
 
                 else{
 
@@ -1358,11 +1394,10 @@ function displayData(data){
 
 
 /* =====================================================
-   APPLY FILTERS
+   FILTERS
 ===================================================== */
 
 function applyFilters(){
-
 
     const selectedDay =
         document.getElementById(
@@ -1414,11 +1449,11 @@ function applyFilters(){
         ]);
 
 
-    /* ================= BASIC FILTER ================= */
-
     let filtered =
         allData.filter(row => {
 
+
+            /* DAY */
 
             const dayMatch =
                 selectedDay === "ALL" ||
@@ -1428,6 +1463,8 @@ function applyFilters(){
                 selectedDay;
 
 
+            /* ROOM */
+
             const roomMatch =
                 selectedRoom === "ALL" ||
                 String(
@@ -1436,12 +1473,13 @@ function applyFilters(){
                 selectedRoom;
 
 
+            /* CAPACITY */
+
             const capacityMatch =
-                selectedCapacity === "ALL" ||
-                String(
-                    row[capacityIndex] || ""
-                ).trim() ===
-                selectedCapacity;
+                checkCapacityRange(
+                    row[capacityIndex],
+                    selectedCapacity
+                );
 
 
             return (
@@ -1454,9 +1492,10 @@ function applyFilters(){
 
 
     /*
-       PERIOD SELECTED
+       PERIOD
 
-       Only FREE labs
+       If selected:
+       only FREE labs
     */
 
     if(
@@ -1469,7 +1508,9 @@ function applyFilters(){
             );
 
 
-        if(periodIndex !== -1){
+        if(
+            periodIndex !== -1
+        ){
 
             filtered =
                 filtered.filter(
@@ -1508,6 +1549,95 @@ function applyFilters(){
 
 
 /* =====================================================
+   CAPACITY RANGE
+===================================================== */
+
+function checkCapacityRange(
+    value,
+    range
+){
+
+    if(
+        range === "ALL"
+    ){
+
+        return true;
+
+    }
+
+
+    /*
+       Convert capacity to number
+    */
+
+    const capacity =
+        parseInt(
+            String(
+                value || ""
+            ).replace(
+                /[^0-9]/g,
+                ""
+            )
+        );
+
+
+    if(
+        isNaN(capacity)
+    ){
+
+        return false;
+
+    }
+
+
+    if(
+        range === "BELOW_60"
+    ){
+
+        return capacity < 60;
+
+    }
+
+
+    if(
+        range === "60_80"
+    ){
+
+        return (
+            capacity >= 60 &&
+            capacity <= 80
+        );
+
+    }
+
+
+    if(
+        range === "81_100"
+    ){
+
+        return (
+            capacity >= 81 &&
+            capacity <= 100
+        );
+
+    }
+
+
+    if(
+        range === "ABOVE_100"
+    ){
+
+        return capacity > 100;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =====================================================
    FREE
 ===================================================== */
 
@@ -1524,24 +1654,27 @@ function isFree(value){
 
 
     const text =
-        String(value)
+        String(
+            value
+        )
         .trim()
         .toLowerCase();
 
 
-    if(text === ""){
+    if(
+        text === ""
+    ){
+
         return true;
+
     }
 
 
     return (
 
         text === "free" ||
-
         text === "available" ||
-
         text === "vacant" ||
-
         text === "idle"
 
     );
@@ -1566,7 +1699,9 @@ function isFull(value){
 
 
     const text =
-        String(value)
+        String(
+            value
+        )
         .trim()
         .toLowerCase();
 
@@ -1574,9 +1709,7 @@ function isFull(value){
     return (
 
         text === "full" ||
-
         text === "occupied" ||
-
         text === "busy"
 
     );
@@ -1611,7 +1744,9 @@ function updateDashboard(data){
             );
 
 
-        if(index !== -1){
+        if(
+            index !== -1
+        ){
 
             data.forEach(row => {
 
@@ -1644,11 +1779,11 @@ function updateDashboard(data){
     else{
 
         /*
-           All periods selected:
-           count based on first period
+           Use first period
         */
 
-        let firstPeriodIndex = -1;
+        let firstPeriod =
+            -1;
 
 
         for(
@@ -1663,7 +1798,7 @@ function updateDashboard(data){
                 )
             ){
 
-                firstPeriodIndex =
+                firstPeriod =
                     i;
 
                 break;
@@ -1674,14 +1809,14 @@ function updateDashboard(data){
 
 
         if(
-            firstPeriodIndex !== -1
+            firstPeriod !== -1
         ){
 
             data.forEach(row => {
 
                 if(
                     isFree(
-                        row[firstPeriodIndex]
+                        row[firstPeriod]
                     )
                 ){
 
@@ -1691,7 +1826,7 @@ function updateDashboard(data){
 
                 else if(
                     isFull(
-                        row[firstPeriodIndex]
+                        row[firstPeriod]
                     )
                 ){
 
@@ -1731,7 +1866,6 @@ function updateDashboard(data){
 ===================================================== */
 
 function resetFilters(){
-
 
     document.getElementById(
         "dayFilter"
@@ -1859,8 +1993,14 @@ function normalize(value){
         value || ""
     )
     .toLowerCase()
-    .replace(/\s+/g,"")
-    .replace(/[–—]/g,"-")
+    .replace(
+        /\s+/g,
+        ""
+    )
+    .replace(
+        /[–—]/g,
+        "-"
+    )
     .trim();
 
 }
@@ -1997,7 +2137,7 @@ function printTable(){
 
 
 /* =====================================================
-   EXCEL DOWNLOAD
+   EXCEL / CSV DOWNLOAD
 ===================================================== */
 
 function downloadExcel(){
@@ -2005,26 +2145,21 @@ function downloadExcel(){
     let csv = "";
 
 
-    /*
-       Headers
-    */
-
     csv +=
         headers
         .map(
             h =>
                 '"' +
                 String(h)
-                .replace(/"/g,'""') +
+                .replace(
+                    /"/g,
+                    '""'
+                ) +
                 '"'
         )
         .join(",") +
         "\n";
 
-
-    /*
-       Data
-    */
 
     currentData.forEach(row => {
 
@@ -2047,10 +2182,6 @@ function downloadExcel(){
 
     });
 
-
-    /*
-       Download
-    */
 
     const blob =
         new Blob(
@@ -2103,8 +2234,7 @@ function downloadExcel(){
 
 
 /* =====================================================
-   AUTO REFRESH
-   Every 5 minutes
+   AUTO REFRESH - 5 MINUTES
 ===================================================== */
 
 setInterval(

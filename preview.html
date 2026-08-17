@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MGIT Labs Timetable AY 2026-27</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
+.header{background:linear-gradient(135deg,#123b7a,#1e63b6);color:#fff;padding:28px 20px;text-align:center}
+.header h1{margin:0;font-size:28px} .header h2{margin:7px 0 0;font-size:20px;font-weight:600}
+.header p{margin:8px 0 0;font-size:16px;opacity:.95}
+.container{max-width:1500px;margin:22px auto;padding:0 16px}
+.card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 5px 20px rgba(20,45,90,.08);margin-bottom:18px}
+.search{width:100%;padding:13px 15px;border:1px solid #ccd5e3;border-radius:9px;font-size:15px;outline:none}
+.search:focus{border-color:#2b72c7;box-shadow:0 0 0 3px rgba(43,114,199,.12)}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:12px}
+select{width:100%;padding:11px;border:1px solid #ccd5e3;border-radius:8px;background:#fff;font-size:14px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+button{border:0;border-radius:8px;padding:10px 14px;cursor:pointer;font-weight:600}
+.primary{background:#1e63b6;color:#fff} .secondary{background:#e8eef7;color:#234}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{padding:16px;border-radius:11px;background:#f7f9fc;border:1px solid #e5eaf2}
+.stat b{display:block;font-size:26px;margin-top:5px}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.section-title h3{margin:0}
+.table-wrap{overflow:auto;margin-top:14px;border:1px solid #e1e6ef;border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:1200px}
+th,td{border-bottom:1px solid #e8edf4;border-right:1px solid #edf1f6;padding:10px 9px;text-align:left;vertical-align:top;font-size:13px}
+th{background:#eef4fb;position:sticky;top:0;z-index:2;white-space:nowrap}
+td:first-child,th:first-child{text-align:center}
+.free{background:#e9f8ee;color:#137a38;font-weight:700;text-align:center}
+.lunch{background:#fff5dc;color:#8a5b00;font-weight:700;text-align:center}
+.badge{display:inline-block;padding:4px 8px;border-radius:20px;background:#e8f6ed;color:#15733a;font-size:12px;font-weight:700}
+.empty{padding:20px;text-align:center;color:#667085}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.header h1{font-size:22px}.header h2{font-size:17px}}
+</style>
+</head>
+<body>
+<header class="header">
+  <h1>Mahatma Gandhi Institute of Technology</h1>
+  <h2>Training and Placement Cell</h2>
+  <p>All Branches Labs Time Tables, AY 2026-27, Odd Semester</p>
+</header>
+
+<main class="container">
+  <section class="card">
+    <input id="search" class="search" placeholder="🔎 Search Day, Room No., Lab, Subject or any timetable data...">
+    <div class="filters">
+      <select id="dayFilter"><option value="">All Days</option></select>
+      <select id="roomFilter"><option value="">All Rooms</option></select>
+      <select id="periodFilter"><option value="">All Periods</option></select>
+    </div>
+    <div class="actions">
+      <button class="primary" onclick="resetFilters()">Clear Filters</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="stats">
+      <div class="stat">Total Timetable Rows<b id="totalRows">0</b></div>
+      <div class="stat">Visible Rows<b id="visibleRows">0</b></div>
+      <div class="stat">Free Slots<b id="freeSlots">0</b></div>
+      <div class="stat">Rooms<b id="roomCount">0</b></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">
+      <h3>🟢 Free Labs Finder</h3>
+      <span class="badge">Empty timetable cells = FREE</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>S.No.</th><th>Day</th><th>Room No.</th><th>Free Time</th></tr></thead>
+        <tbody id="freeBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">
+      <h3>📋 All Branches Labs Timetable</h3>
+      <span id="resultLabel"></span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>S.No.</th><th>Day</th><th>Room No.</th><th>9.10 - 10.10</th><th>10.10 - 11.10</th><th>11.15 - 12.15</th><th>12.15-1.00</th><th>1.00 - 2.00</th><th>2.00 - 3.00</th><th>3.05 - 4.05</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script>
+const DATA = [{"S.No.": "1", "Day": "Monday", "Room No.": "C-201", "9.10 - 10.10": "DSP Lab (V Sem ECE-3)", "10.10 - 11.10": "DSP Lab (V Sem ECE-3)", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "DSP Lab (V Sem ECE-1)", "2.00 - 3.00": "DSP Lab (V Sem ECE-1)", "3.05 - 4.05": ""}, {"S.No.": "2", "Day": "Tuesday", "Room No.": "C-201", "9.10 - 10.10": "DSP Lab (V Sem ECE-1)", "10.10 - 11.10": "DSP Lab (V Sem ECE-1)", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "3", "Day": "Wednesday", "Room No.": "C-201", "9.10 - 10.10": "DSP Lab (V Sem ECE-2)", "10.10 - 11.10": "DSP Lab (V Sem ECE-2)", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "DSP Lab (V Sem ECE-3)", "3.05 - 4.05": "DSP Lab (V Sem ECE-3)"}, {"S.No.": "4", "Day": "Thursday", "Room No.": "C-201", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "DSP Lab (V Sem ECE-2)", "3.05 - 4.05": "DSP Lab (V Sem ECE-2)"}, {"S.No.": "5", "Day": "Friday", "Room No.": "C-201", "9.10 - 10.10": "DSD Lab (I Sem M.Tech)", "10.10 - 11.10": "DSD Lab (I Sem M.Tech)", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "DSD Lab (I Sem M.Tech)", "2.00 - 3.00": "DSD Lab (I Sem M.Tech)", "3.05 - 4.05": ""}, {"S.No.": "6", "Day": "Saturday", "Room No.": "C-201", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "7", "Day": "Monday", "Room No.": "C-304", "9.10 - 10.10": "MC Lab  (V Sem ECE-3)", "10.10 - 11.10": "MC Lab  (V Sem ECE-3)", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "PPS Lab  (I Sem ECE-1)", "3.05 - 4.05": "PPS Lab  (I Sem ECE-1)"}, {"S.No.": "8", "Day": "Tuesday", "Room No.": "C-304", "9.10 - 10.10": "MC Lab  (V Sem ECE-3)", "10.10 - 11.10": "MC Lab  (V Sem ECE-3)", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "MC Lab  (V Sem ECE-2)", "2.00 - 3.00": "MC Lab  (V Sem ECE-2)", "3.05 - 4.05": ""}, {"S.No.": "9", "Day": "Wednesday", "Room No.": "C-304", "9.10 - 10.10": "MC Lab  (V Sem ECE-2)", "10.10 - 11.10": "MC Lab  (V Sem ECE-2)", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "JAVA Lab  (VII Sem ECE-3)", "2.00 - 3.00": "JAVA Lab  (VII Sem ECE-3)", "3.05 - 4.05": ""}, {"S.No.": "10", "Day": "Thursday", "Room No.": "C-304", "9.10 - 10.10": "MC Lab  (V Sem ECE-1)", "10.10 - 11.10": "MC Lab  (V Sem ECE-1)", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "JAVA Lab  (VII Sem ECE-3)", "2.00 - 3.00": "JAVA Lab  (VII Sem ECE-3)", "3.05 - 4.05": ""}, {"S.No.": "11", "Day": "Friday", "Room No.": "C-304", "9.10 - 10.10": "PPS Lab  (I Sem ECE-1)", "10.10 - 11.10": "PPS Lab  (I Sem ECE-1)", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "12", "Day": "Saturday", "Room No.": "C-304", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "13", "Day": "Monday", "Room No.": "C-401", "9.10 - 10.10": "", "10.10 - 11.10": "MS Lab  (III Sem ECE-3)", "11.15 - 12.15": "MS Lab  (III Sem ECE-3)", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "JAVA Lab  (VII Sem ECE-1)", "3.05 - 4.05": "JAVA Lab  (VII Sem ECE-1)"}, {"S.No.": "14", "Day": "Tuesday", "Room No.": "C-401", "9.10 - 10.10": "", "10.10 - 11.10": "JAVA Lab  (VII Sem ECE-2)", "11.15 - 12.15": "JAVA Lab  (VII Sem ECE-2)", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "JAVA Lab  (VII Sem ECE-1)", "3.05 - 4.05": "JAVA Lab  (VII Sem ECE-1)"}, {"S.No.": "15", "Day": "Wednesday", "Room No.": "C-401", "9.10 - 10.10": "MS Lab  (III Sem ECE-1)", "10.10 - 11.10": "MS Lab  (III Sem ECE-1)", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "MS Lab  (III Sem ECE-3)", "3.05 - 4.05": "MS Lab  (III Sem ECE-3)"}, {"S.No.": "16", "Day": "Thursday", "Room No.": "C-401", "9.10 - 10.10": "", "10.10 - 11.10": "JAVA Lab  (VII Sem ECE-2)", "11.15 - 12.15": "JAVA Lab  (VII Sem ECE-2)", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "MS Lab  (III Sem ECE-2)", "3.05 - 4.05": "MS Lab  (III Sem ECE-2)"}, {"S.No.": "17", "Day": "Friday", "Room No.": "C-401", "9.10 - 10.10": "MS Lab  (III Sem ECE-2)", "10.10 - 11.10": "MS Lab  (III Sem ECE-2)", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "MS Lab  (III Sem ECE-1)", "3.05 - 4.05": "MS Lab  (III Sem ECE-1)"}, {"S.No.": "18", "Day": "Saturday", "Room No.": "C-401", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "19", "Day": "Monday", "Room No.": "A-207", "9.10 - 10.10": "V CSM CN", "10.10 - 11.10": "V CSM CN", "11.15 - 12.15": "V CSM CN", "12.15-1.00": "Lunch", "1.00 - 2.00": "III CSD CM", "2.00 - 3.00": "III CSD CM", "3.05 - 4.05": "III CSD CM"}, {"S.No.": "20", "Day": "Tuesday", "Room No.": "A-207", "9.10 - 10.10": "I CSD PPS", "10.10 - 11.10": "I CSD PPS", "11.15 - 12.15": "I CSD PPS", "12.15-1.00": "Lunch", "1.00 - 2.00": "III CSM CM", "2.00 - 3.00": "III CSM CM", "3.05 - 4.05": "III CSM CM"}, {"S.No.": "21", "Day": "Wednesday", "Room No.": "A-207", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "I CSM3 PPS", "2.00 - 3.00": "I CSM3 PPS", "3.05 - 4.05": "I CSM3 PPS"}, {"S.No.": "22", "Day": "Thursday", "Room No.": "A-207", "9.10 - 10.10": "I CSM1 PPS", "10.10 - 11.10": "I CSM1 PPS", "11.15 - 12.15": "I CSM1 PPS", "12.15-1.00": "Lunch", "1.00 - 2.00": "V CSM CN", "2.00 - 3.00": "V CSM CN", "3.05 - 4.05": "V CSM CN"}, {"S.No.": "23", "Day": "Friday", "Room No.": "A-207", "9.10 - 10.10": "I CSM2 PPS", "10.10 - 11.10": "I CSM2 PPS", "11.15 - 12.15": "I CSM2 PPS", "12.15-1.00": "Lunch", "1.00 - 2.00": "VII CSM DL", "2.00 - 3.00": "VII CSM DL", "3.05 - 4.05": "VII CSM DL"}, {"S.No.": "24", "Day": "Saturday", "Room No.": "A-207", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "25", "Day": "Monday", "Room No.": "A-207A", "9.10 - 10.10": "III CSM SE", "10.10 - 11.10": "III CSM SE", "11.15 - 12.15": "III CSM SE", "12.15-1.00": "Lunch", "1.00 - 2.00": "III CSD CM", "2.00 - 3.00": "III CSD CM", "3.05 - 4.05": "III CSD CM"}, {"S.No.": "26", "Day": "Tuesday", "Room No.": "A-207A", "9.10 - 10.10": "I CSD PPS", "10.10 - 11.10": "I CSD PPS", "11.15 - 12.15": "I CSD PPS", "12.15-1.00": "Lunch", "1.00 - 2.00": "III CSM CM", "2.00 - 3.00": "III CSM CM", "3.05 - 4.05": "III CSM CM"}, {"S.No.": "27", "Day": "Wednesday", "Room No.": "A-207A", "9.10 - 10.10": "III CSM SE", "10.10 - 11.10": "III CSM SE", "11.15 - 12.15": "III CSM SE", "12.15-1.00": "Lunch", "1.00 - 2.00": "I CSM3 PPS", "2.00 - 3.00": "I CSM3 PPS", "3.05 - 4.05": "I CSM3 PPS"}, {"S.No.": "28", "Day": "Thursday", "Room No.": "A-207A", "9.10 - 10.10": "I CSM1 PPS", "10.10 - 11.10": "I CSM1 PPS", "11.15 - 12.15": "I CSM1 PPS", "12.15-1.00": "Lunch", "1.00 - 2.00": "III MCT CM", "2.00 - 3.00": "III MCT CM", "3.05 - 4.05": "III MCT CM"}, {"S.No.": "29", "Day": "Friday", "Room No.": "A-207A", "9.10 - 10.10": "I CSM2 PPS", "10.10 - 11.10": "I CSM2 PPS", "11.15 - 12.15": "I CSM2 PPS", "12.15-1.00": "Lunch", "1.00 - 2.00": "VII CSM DL", "2.00 - 3.00": "VII CSM DL", "3.05 - 4.05": "VII CSM DL"}, {"S.No.": "30", "Day": "Saturday", "Room No.": "A-207A", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "31", "Day": "Monday", "Room No.": "A-213", "9.10 - 10.10": "I CSM1 ITWS", "10.10 - 11.10": "I CSM1 ITWS", "11.15 - 12.15": "I CSM1 ITWS", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "32", "Day": "Tuesday", "Room No.": "A-213", "9.10 - 10.10": "I CSM3 ITWS", "10.10 - 11.10": "I CSM3 ITWS", "11.15 - 12.15": "I CSM3 ITWS", "12.15-1.00": "Lunch", "1.00 - 2.00": "I CSM2 ITWS", "2.00 - 3.00": "I CSM2 ITWS", "3.05 - 4.05": "I CSM2 ITWS"}, {"S.No.": "33", "Day": "Wednesday", "Room No.": "A-213", "9.10 - 10.10": "III CSD NODEJS", "10.10 - 11.10": "III CSD NODEJS", "11.15 - 12.15": "III CSD NODEJS", "12.15-1.00": "Lunch", "1.00 - 2.00": "I CSD ITWS", "2.00 - 3.00": "I CSD ITWS", "3.05 - 4.05": "I CSD ITWS"}, {"S.No.": "34", "Day": "Thursday", "Room No.": "A-213", "9.10 - 10.10": "I CSM2 ITWS", "10.10 - 11.10": "I CSM2 ITWS", "11.15 - 12.15": "I CSM2 ITWS", "12.15-1.00": "Lunch", "1.00 - 2.00": "III CSM NODEJS", "2.00 - 3.00": "III CSM NODEJS", "3.05 - 4.05": "III CSM NODEJS"}, {"S.No.": "35", "Day": "Friday", "Room No.": "A-213", "9.10 - 10.10": "III CSD NODEJS", "10.10 - 11.10": "III CSD NODEJS", "11.15 - 12.15": "III CSD NODEJS", "12.15-1.00": "Lunch", "1.00 - 2.00": "III CSM NODEJS", "2.00 - 3.00": "III CSM NODEJS", "3.05 - 4.05": "III CSM NODEJS"}, {"S.No.": "36", "Day": "Saturday", "Room No.": "A-213", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "37", "Day": "Monday", "Room No.": "A-213A", "9.10 - 10.10": "I CSM1 ITWS", "10.10 - 11.10": "I CSM1 ITWS", "11.15 - 12.15": "I CSM1 ITWS", "12.15-1.00": "Lunch", "1.00 - 2.00": "III MECH CM", "2.00 - 3.00": "III MECH CM", "3.05 - 4.05": "III MECH CM"}, {"S.No.": "38", "Day": "Tuesday", "Room No.": "A-213A", "9.10 - 10.10": "I CSM3 ITWS", "10.10 - 11.10": "I CSM3 ITWS", "11.15 - 12.15": "I CSM3 ITWS", "12.15-1.00": "Lunch", "1.00 - 2.00": "V CSD CN", "2.00 - 3.00": "V CSD CN", "3.05 - 4.05": "V CSD CN"}, {"S.No.": "39", "Day": "Wednesday", "Room No.": "A-213A", "9.10 - 10.10": "III CSD OOPJ", "10.10 - 11.10": "III CSD OOPJ", "11.15 - 12.15": "III CSD OOPJ", "12.15-1.00": "Lunch", "1.00 - 2.00": "I CSD ITWS", "2.00 - 3.00": "I CSD ITWS", "3.05 - 4.05": "I CSD ITWS"}, {"S.No.": "40", "Day": "Thursday", "Room No.": "A-213A", "9.10 - 10.10": "V CSD CN", "10.10 - 11.10": "V CSD CN", "11.15 - 12.15": "V CSD CN", "12.15-1.00": "Lunch", "1.00 - 2.00": "III CSM OOPJ", "2.00 - 3.00": "III CSM OOPJ", "3.05 - 4.05": "III CSM OOPJ"}, {"S.No.": "41", "Day": "Friday", "Room No.": "A-213A", "9.10 - 10.10": "III CSD OOPJ", "10.10 - 11.10": "III CSD OOPJ", "11.15 - 12.15": "III CSD OOPJ", "12.15-1.00": "Lunch", "1.00 - 2.00": "III CSM OOPJ", "2.00 - 3.00": "III CSM OOPJ", "3.05 - 4.05": "III CSM OOPJ"}, {"S.No.": "42", "Day": "Saturday", "Room No.": "A-213A", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "43", "Day": "Monday", "Room No.": "D-004", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "V CSD RPROG", "2.00 - 3.00": "V CSD RPROG", "3.05 - 4.05": "V CSD RPROG"}, {"S.No.": "44", "Day": "Tuesday", "Room No.": "D-004", "9.10 - 10.10": "III CSD DBMS", "10.10 - 11.10": "III CSD DBMS", "11.15 - 12.15": "III CSD DBMS", "12.15-1.00": "Lunch", "1.00 - 2.00": "V CSM ML", "2.00 - 3.00": "V CSM ML", "3.05 - 4.05": "V CSM ML"}, {"S.No.": "45", "Day": "Wednesday", "Room No.": "D-004", "9.10 - 10.10": "III MCT CM", "10.10 - 11.10": "III MCT CM", "11.15 - 12.15": "III MCT CM", "12.15-1.00": "Lunch", "1.00 - 2.00": "V CSD RPROG", "2.00 - 3.00": "V CSD RPROG", "3.05 - 4.05": "V CSD RPROG"}, {"S.No.": "46", "Day": "Thursday", "Room No.": "D-004", "9.10 - 10.10": "VII CSD WSMA", "10.10 - 11.10": "VII CSD WSMA", "11.15 - 12.15": "VII CSD WSMA", "12.15-1.00": "Lunch", "1.00 - 2.00": "III CSD DBMS", "2.00 - 3.00": "III CSD DBMS", "3.05 - 4.05": "III CSD DBMS"}, {"S.No.": "47", "Day": "Friday", "Room No.": "D-004", "9.10 - 10.10": "V CSM ML", "10.10 - 11.10": "V CSM ML", "11.15 - 12.15": "V CSM ML", "12.15-1.00": "Lunch", "1.00 - 2.00": "VII CSD WSMA", "2.00 - 3.00": "VII CSD WSMA", "3.05 - 4.05": "VII CSD WSMA"}, {"S.No.": "48", "Day": "Saturday", "Room No.": "D-004", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "49", "Day": "Monday", "Room No.": "D-005", "9.10 - 10.10": "III CSM DBMS", "10.10 - 11.10": "III CSM DBMS", "11.15 - 12.15": "III CSM DBMS", "12.15-1.00": "Lunch", "1.00 - 2.00": "V CSD ETLKAFKA", "2.00 - 3.00": "V CSD ETLKAFKA", "3.05 - 4.05": "V CSD ETLKAFKA"}, {"S.No.": "50", "Day": "Tuesday", "Room No.": "D-005", "9.10 - 10.10": "III CSD SE", "10.10 - 11.10": "III CSD SE", "11.15 - 12.15": "III CSD SE", "12.15-1.00": "Lunch", "1.00 - 2.00": "V CSM UIFLUTTER", "2.00 - 3.00": "V CSM UIFLUTTER", "3.05 - 4.05": "V CSM UIFLUTTER"}, {"S.No.": "51", "Day": "Wednesday", "Room No.": "D-005", "9.10 - 10.10": "III CSM DBMS", "10.10 - 11.10": "III CSM DBMS", "11.15 - 12.15": "III CSM DBMS", "12.15-1.00": "Lunch", "1.00 - 2.00": "V CSD ETLKAFKA", "2.00 - 3.00": "V CSD ETLKAFKA", "3.05 - 4.05": "V CSD ETLKAFKA"}, {"S.No.": "52", "Day": "Thursday", "Room No.": "D-005", "9.10 - 10.10": "VII CSD PA", "10.10 - 11.10": "VII CSD PA", "11.15 - 12.15": "VII CSD PA", "12.15-1.00": "Lunch", "1.00 - 2.00": "III CSD SE", "2.00 - 3.00": "III CSD SE", "3.05 - 4.05": "III CSD SE"}, {"S.No.": "53", "Day": "Friday", "Room No.": "D-005", "9.10 - 10.10": "V CSM UIFLUTTER", "10.10 - 11.10": "V CSM UIFLUTTER", "11.15 - 12.15": "V CSM UIFLUTTER", "12.15-1.00": "Lunch", "1.00 - 2.00": "VII CSD PA", "2.00 - 3.00": "VII CSD PA", "3.05 - 4.05": "VII CSD PA"}, {"S.No.": "54", "Day": "Saturday", "Room No.": "D-005", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "55", "Day": "Monday", "Room No.": "A-215", "9.10 - 10.10": "", "10.10 - 11.10": "CSE-1-B2", "11.15 - 12.15": "CSE-1-B2", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "IT-B2", "3.05 - 4.05": "IT-B2"}, {"S.No.": "56", "Day": "Tuesday", "Room No.": "A-215", "9.10 - 10.10": "", "10.10 - 11.10": "CSE-3-B2", "11.15 - 12.15": "CSE-3-B2", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "CSD-B2", "3.05 - 4.05": "CSD-B2"}, {"S.No.": "57", "Day": "Wednesday", "Room No.": "A-215", "9.10 - 10.10": "", "10.10 - 11.10": "CSE-5-B2", "11.15 - 12.15": "CSE-5-B2", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "CSE-3-B1", "3.05 - 4.05": "CSE-3-B1"}, {"S.No.": "58", "Day": "Thursday", "Room No.": "A-215", "9.10 - 10.10": "", "10.10 - 11.10": "CSD-B1", "11.15 - 12.15": "CSD-B1", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "CSE-1-B1", "3.05 - 4.05": "CSE-1-B1"}, {"S.No.": "59", "Day": "Friday", "Room No.": "A-215", "9.10 - 10.10": "IT-B1", "10.10 - 11.10": "IT-B1", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "CSE-5-B1", "3.05 - 4.05": "CSE-5-B1"}, {"S.No.": "60", "Day": "Saturday", "Room No.": "A-215", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "61", "Day": "Monday", "Room No.": "A-120", "9.10 - 10.10": "", "10.10 - 11.10": "MECH- B2 & MCT - B2", "11.15 - 12.15": "MECH- B2 & MCT - B2", "12.15-1.00": "Lunch", "1.00 - 2.00": "ECE-2-B2", "2.00 - 3.00": "ECE-1-B2 & ECE-2-B2", "3.05 - 4.05": "ECE-1-B2"}, {"S.No.": "62", "Day": "Tuesday", "Room No.": "A-120", "9.10 - 10.10": "", "10.10 - 11.10": "ECE-2-B1 & ECE-3-B2", "11.15 - 12.15": "ECE-2-B1 & ECE-3-B2", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "EEE - B2", "3.05 - 4.05": "EEE - B2"}, {"S.No.": "63", "Day": "Wednesday", "Room No.": "A-120", "9.10 - 10.10": "", "10.10 - 11.10": "ECE-1-B1 & MME- B1", "11.15 - 12.15": "ECE-1-B1 & MME- B1", "12.15-1.00": "Lunch", "1.00 - 2.00": "CIV - B2", "2.00 - 3.00": "CIV - B2", "3.05 - 4.05": ""}, {"S.No.": "64", "Day": "Thursday", "Room No.": "A-120", "9.10 - 10.10": "", "10.10 - 11.10": "MME- B2", "11.15 - 12.15": "MME- B2", "12.15-1.00": "Lunch", "1.00 - 2.00": "CIV - B1", "2.00 - 3.00": "CIV - B1 & MECH - B1", "3.05 - 4.05": "MECH - B1"}, {"S.No.": "65", "Day": "Friday", "Room No.": "A-120", "9.10 - 10.10": "", "10.10 - 11.10": "EEE-B1", "11.15 - 12.15": "EEE-B1", "12.15-1.00": "Lunch", "1.00 - 2.00": "ECE-3-B1 & MCT - B1", "2.00 - 3.00": "ECE-3-B1 & MCT - B1", "3.05 - 4.05": ""}, {"S.No.": "66", "Day": "Saturday", "Room No.": "A-120", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "Lunch", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "67", "Day": "Monday", "Room No.": "D-302", "9.10 - 10.10": "", "10.10 - 11.10": "IS LAB - VII SEM IT", "11.15 - 12.15": "IOT LAB - III SEM IT", "12.15-1.00": "", "1.00 - 2.00": "", "2.00 - 3.00": "ML LAB - V SEM IT", "3.05 - 4.05": "ML LAB - V SEM IT"}, {"S.No.": "68", "Day": "Tuesday", "Room No.": "D-302", "9.10 - 10.10": "", "10.10 - 11.10": "IS LAB - VII SEM IT", "11.15 - 12.15": "IS LAB - VII SEM IT", "12.15-1.00": "", "1.00 - 2.00": "", "2.00 - 3.00": "DBMD LAB - III SEM IT", "3.05 - 4.05": "DBMD LAB - III SEM IT"}, {"S.No.": "69", "Day": "Wednesday", "Room No.": "D-302", "9.10 - 10.10": "ML LAB - V SEM IT", "10.10 - 11.10": "ML LAB - V SEM IT", "11.15 - 12.15": "", "12.15-1.00": "", "1.00 - 2.00": "", "2.00 - 3.00": "IS LAB - VII SEM IT", "3.05 - 4.05": "IS LAB - VII SEM IT"}, {"S.No.": "70", "Day": "Thursday", "Room No.": "D-302", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}, {"S.No.": "71", "Day": "Friday", "Room No.": "D-302", "9.10 - 10.10": "", "10.10 - 11.10": "DBMD LAB - III SEM IT", "11.15 - 12.15": "DBMD LAB - III SEM IT", "12.15-1.00": "", "1.00 - 2.00": "", "2.00 - 3.00": "IS LAB - VII SEM IT", "3.05 - 4.05": "IS LAB - VII SEM IT"}, {"S.No.": "72", "Day": "Saturday", "Room No.": "D-302", "9.10 - 10.10": "", "10.10 - 11.10": "", "11.15 - 12.15": "", "12.15-1.00": "", "1.00 - 2.00": "", "2.00 - 3.00": "", "3.05 - 4.05": ""}];
+const HEADERS = ["S.No.", "Day", "Room No.", "9.10 - 10.10", "10.10 - 11.10", "11.15 - 12.15", "12.15-1.00", "1.00 - 2.00", "2.00 - 3.00", "3.05 - 4.05"];
+const PERIODS = ["9.10 - 10.10", "10.10 - 11.10", "11.15 - 12.15", "12.15-1.00", "1.00 - 2.00", "2.00 - 3.00", "3.05 - 4.05"];
+let filtered = DATA.slice();
+
+const searchEl = document.getElementById('search');
+const dayEl = document.getElementById('dayFilter');
+const roomEl = document.getElementById('roomFilter');
+const periodEl = document.getElementById('periodFilter');
+
+function unique(key) {
+  return [...new Set(DATA.map(r => r[key]).filter(Boolean))].sort();
+}
+function fillSelect(el, values) {
+  values.forEach(v => {
+    const o=document.createElement('option'); o.value=v; o.textContent=v; el.appendChild(o);
+  });
+}
+fillSelect(dayEl, unique('Day'));
+fillSelect(roomEl, unique('Room No.'));
+fillSelect(periodEl, PERIODS);
+
+function matches(r) {
+  const q=searchEl.value.trim().toLowerCase();
+  if(q && !HEADERS.some(h => String(r[h]||'').toLowerCase().includes(q))) return false;
+  if(dayEl.value && r['Day']!==dayEl.value) return false;
+  if(roomEl.value && r['Room No.']!==roomEl.value) return false;
+  if(periodEl.value && periodEl.value!=='' ) {
+    const v=String(r[periodEl.value]||'').trim();
+    if(v!=='') return false;
+  }
+  return true;
+}
+
+function applyFilters() {
+  filtered=DATA.filter(matches);
+  renderTable();
+  renderFree();
+  document.getElementById('visibleRows').textContent=filtered.length;
+  document.getElementById('resultLabel').textContent=`${filtered.length} row(s) shown`;
+}
+
+function renderTable() {
+  const body=document.getElementById('tableBody');
+  if(!filtered.length) { body.innerHTML='<tr><td class="empty" colspan="'+HEADERS.length+'">No matching records found.</td></tr>'; return; }
+  body.innerHTML=filtered.map(r=>'<tr>'+HEADERS.map((h,i)=>{
+    const v=String(r[h]||'').trim();
+    if(h==='12.15-1.00') return '<td class="lunch">'+(v||'Lunch')+'</td>';
+    return '<td class="'+(!v?'free':'')+'">'+(v||'FREE')+'</td>';
+  }).join('')+'</tr>').join('');
+}
+
+function renderFree() {
+  const body=document.getElementById('freeBody');
+  let rows=[];
+  filtered.forEach(r=>{
+    PERIODS.forEach(p=>{
+      if(p==='12.15-1.00') return;
+      if(!String(r[p]||'').trim()) rows.push({s:r['S.No.'],d:r['Day'],room:r['Room No.'],p});
+    });
+  });
+  document.getElementById('freeSlots').textContent=rows.length;
+  body.innerHTML=rows.length ? rows.map(x=>`<tr><td>${x.s}</td><td>${x.d}</td><td>${x.room}</td><td class="free">${x.p}</td></tr>`).join('') :
+    '<tr><td class="empty" colspan="4">No free lab slots found for the selected filters.</td></tr>';
+}
+
+function resetFilters() {
+  searchEl.value=''; dayEl.value=''; roomEl.value=''; periodEl.value=''; applyFilters();
+}
+[searchEl,dayEl,roomEl,periodEl].forEach(el=>el.addEventListener('input',applyFilters));
+document.getElementById('totalRows').textContent=DATA.length;
+document.getElementById('roomCount').textContent=new Set(DATA.map(r=>r['Room No.']).filter(Boolean)).size;
+applyFilters();
+</script>
+</body>
+</html>

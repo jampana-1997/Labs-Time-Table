@@ -7,6 +7,7 @@
 <title>MGIT Lab Time Tables | AY 2026-27</title>
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -16,8 +17,10 @@
 
 body{
     background:#f4f7fb;
-    color:#1f2937;
+    color:#111827;
 }
+
+/* ================= HEADER ================= */
 
 .header{
     background:#123c69;
@@ -27,14 +30,14 @@ body{
 }
 
 .header h1{
-    font-size:27px;
+    font-size:28px;
     margin-bottom:8px;
 }
 
 .header h2{
     font-size:18px;
     font-weight:normal;
-    margin-bottom:5px;
+    margin-bottom:6px;
 }
 
 .header p{
@@ -42,11 +45,15 @@ body{
     opacity:.9;
 }
 
+/* ================= CONTAINER ================= */
+
 .container{
-    max-width:1400px;
+    max-width:1450px;
     margin:25px auto;
     padding:0 18px;
 }
+
+/* ================= FILTER BOX ================= */
 
 .controls{
     background:white;
@@ -57,14 +64,15 @@ body{
 }
 
 .controls-title{
-    font-size:18px;
+    font-size:19px;
     font-weight:bold;
-    margin-bottom:15px;
+    margin-bottom:16px;
+    color:#123c69;
 }
 
 .filters{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(5,1fr);
     gap:15px;
 }
 
@@ -78,10 +86,11 @@ body{
 
 select{
     width:100%;
-    padding:11px;
+    padding:11px 10px;
     border:1px solid #d1d5db;
     border-radius:7px;
     background:white;
+    color:#111827;
     font-size:14px;
     outline:none;
 }
@@ -90,14 +99,37 @@ select:focus{
     border-color:#2563eb;
 }
 
+/* ================= RESET ================= */
+
+.reset-btn{
+    width:100%;
+    padding:11px;
+    border:none;
+    border-radius:7px;
+    background:#374151;
+    color:white;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.reset-btn:hover{
+    background:#111827;
+}
+
+/* ================= INFO ================= */
+
 .info{
     display:flex;
     justify-content:space-between;
     align-items:center;
+
     background:white;
     padding:15px 18px;
+
     border-radius:10px;
     margin-bottom:15px;
+
     box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
@@ -111,17 +143,21 @@ select:focus{
     color:#15803d;
 }
 
+/* ================= TABLE ================= */
+
 .table-container{
     background:white;
     border-radius:12px;
+
     box-shadow:0 3px 12px rgba(0,0,0,.08);
+
     overflow:auto;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:900px;
+    min-width:1000px;
 }
 
 thead{
@@ -133,64 +169,101 @@ th{
     padding:13px 10px;
     font-size:13px;
     white-space:nowrap;
+
     border-right:1px solid rgba(255,255,255,.2);
 }
 
 td{
     padding:12px 10px;
+
     text-align:center;
+
     border-bottom:1px solid #e5e7eb;
     border-right:1px solid #e5e7eb;
+
     font-size:13px;
 }
 
-tbody tr:hover{
+/* ================= COLORS ================= */
+
+/* FREE */
+
+.free{
+    color:#15803d !important;
+    background:#dcfce7;
+    font-weight:bold;
+}
+
+/* FULL */
+
+.full{
+    color:#dc2626 !important;
+    background:#fee2e2;
+    font-weight:bold;
+}
+
+/* OTHER DATA */
+
+.normal{
+    color:#111827 !important;
+    background:white;
+}
+
+/* ================= HOVER ================= */
+
+tbody tr:hover td.normal{
     background:#f8fafc;
 }
 
-.free{
-    color:#15803d;
-    font-weight:bold;
-    background:#dcfce7;
-}
-
-.busy{
-    color:#b91c1c;
-    font-weight:bold;
-    background:#fee2e2;
-}
+/* ================= LOADING ================= */
 
 .loading{
     text-align:center;
     padding:40px;
+
     font-size:16px;
     color:#6b7280;
 }
 
+/* ================= ERROR ================= */
+
 .error{
     text-align:center;
+
     padding:30px;
+
     color:#b91c1c;
     background:#fee2e2;
+
     margin:20px 0;
+
     border-radius:10px;
 }
 
+/* ================= FOOTER ================= */
+
 .footer{
     text-align:center;
+
     padding:25px;
+
     color:#6b7280;
+
     font-size:13px;
 }
 
-/* Mobile */
-@media(max-width:900px){
+/* ================= MOBILE ================= */
+
+@media(max-width:1100px){
+
     .filters{
         grid-template-columns:repeat(2,1fr);
     }
+
 }
 
 @media(max-width:600px){
+
     .header h1{
         font-size:21px;
     }
@@ -208,122 +281,247 @@ tbody tr:hover{
         gap:8px;
         align-items:flex-start;
     }
+
 }
+
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
 <div class="header">
-    <h1>Mahatma Gandhi Institute of Technology</h1>
-    <h2>Training and Placement Cell</h2>
-    <p>All Branches Labs Time Tables, AY 2026-27, Odd Semester</p>
+
+    <h1>
+        Mahatma Gandhi Institute of Technology
+    </h1>
+
+    <h2>
+        Training and Placement Cell
+    </h2>
+
+    <p>
+        All Branches Labs Time Tables, AY 2026-27, Odd Semester
+    </p>
+
 </div>
 
 
 <div class="container">
 
-    <!-- FILTERS -->
-    <div class="controls">
 
-        <div class="controls-title">
-            Find Free Labs
-        </div>
+<!-- =====================================================
+     FILTERS
+===================================================== -->
 
-        <div class="filters">
+<div class="controls">
 
-            <!-- DAY -->
-            <div class="filter-box">
-                <label>Day</label>
-                <select id="dayFilter">
-                    <option value="ALL">All Days</option>
-                </select>
-            </div>
-
-            <!-- ROOM -->
-            <div class="filter-box">
-                <label>Room No.</label>
-                <select id="roomFilter">
-                    <option value="ALL">All Rooms</option>
-                </select>
-            </div>
-
-            <!-- CAPACITY -->
-            <div class="filter-box">
-                <label>Lab Capacity</label>
-                <select id="capacityFilter">
-                    <option value="ALL">All Lab Capacities</option>
-                </select>
-            </div>
-
-            <!-- PERIOD -->
-            <div class="filter-box">
-                <label>Select Period</label>
-                <select id="periodFilter">
-                    <option value="ALL">All Periods</option>
-                </select>
-            </div>
-
-        </div>
+    <div class="controls-title">
+        Find Free Labs
     </div>
 
 
-    <!-- INFORMATION -->
-    <div class="info">
+    <div class="filters">
 
-        <div class="status" id="status">
-            Loading timetable...
+
+        <!-- DAY -->
+
+        <div class="filter-box">
+
+            <label>
+                Day
+            </label>
+
+            <select id="dayFilter">
+
+                <option value="ALL">
+                    All Days
+                </option>
+
+            </select>
+
         </div>
 
-        <div class="free-count" id="freeCount">
-            Free Labs: 0
+
+        <!-- ROOM -->
+
+        <div class="filter-box">
+
+            <label>
+                Room No.
+            </label>
+
+            <select id="roomFilter">
+
+                <option value="ALL">
+                    All Rooms
+                </option>
+
+            </select>
+
         </div>
 
-    </div>
 
+        <!-- CAPACITY -->
 
-    <!-- TABLE -->
-    <div class="table-container">
+        <div class="filter-box">
 
-        <div id="loading" class="loading">
-            Loading data from Google Sheets...
+            <label>
+                Lab Capacity
+            </label>
+
+            <select id="capacityFilter">
+
+                <option value="ALL">
+                    All Lab Capacities
+                </option>
+
+            </select>
+
         </div>
 
-        <table id="labTable" style="display:none;">
 
-            <thead id="tableHead"></thead>
+        <!-- PERIOD -->
 
-            <tbody id="tableBody"></tbody>
+        <div class="filter-box">
 
-        </table>
+            <label>
+                Select Period
+            </label>
+
+            <select id="periodFilter">
+
+                <option value="ALL">
+                    All Periods
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- RESET -->
+
+        <div class="filter-box">
+
+            <label>
+                &nbsp;
+            </label>
+
+            <button
+                class="reset-btn"
+                onclick="resetFilters()"
+            >
+                RESET
+            </button>
+
+        </div>
+
 
     </div>
 
 </div>
 
 
+<!-- =====================================================
+     INFORMATION
+===================================================== -->
+
+<div class="info">
+
+    <div
+        class="status"
+        id="status"
+    >
+        Loading timetable...
+    </div>
+
+
+    <div
+        class="free-count"
+        id="freeCount"
+    >
+        Free Labs: 0
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TABLE
+===================================================== -->
+
+<div class="table-container">
+
+
+    <div
+        id="loading"
+        class="loading"
+    >
+
+        Loading data from Google Sheets...
+
+    </div>
+
+
+    <table
+        id="labTable"
+        style="display:none;"
+    >
+
+        <thead
+            id="tableHead"
+        ></thead>
+
+        <tbody
+            id="tableBody"
+        ></tbody>
+
+    </table>
+
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
 <div class="footer">
-    Mahatma Gandhi Institute of Technology | Training and Placement Cell
+
+    Mahatma Gandhi Institute of Technology |
+    Training and Placement Cell
+
 </div>
 
 
 <script>
 
-/* =========================================================
-   GOOGLE SHEET CONFIGURATION
-========================================================= */
+
+/* =====================================================
+   GOOGLE SHEET
+===================================================== */
 
 const SHEET_ID =
 "1PNgEr74LPmWGHzorRV_qvBhbc8sxhEFDjt3gjBtaFOY";
 
-const SHEET_NAME = "Sheet1";
-
 
 /*
-   Google Visualization API
-   This reads the Google Sheet directly.
+   IMPORTANT:
+
+   If your Google Sheet tab name is NOT Sheet1,
+   change this name below.
 */
+
+const SHEET_NAME = "Sheet1";
+
 
 const GOOGLE_URL =
 "https://docs.google.com/spreadsheets/d/" +
@@ -332,48 +530,43 @@ SHEET_ID +
 encodeURIComponent(SHEET_NAME);
 
 
-/* =========================================================
-   GLOBAL DATA
-========================================================= */
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
 
 let allData = [];
+
 let headers = [];
 
 
-/* =========================================================
-   TIME PERIOD DETECTION
-========================================================= */
-
-const periodNames = [
-    "9.10 - 10.10",
-    "10.10 - 11.10",
-    "11.15 - 12.15",
-    "12.15-1.00",
-    "1.00 - 2.00",
-    "2.00 - 3.00",
-    "3.05 - 4.05"
-];
-
-
-/* =========================================================
+/* =====================================================
    LOAD GOOGLE SHEET
-========================================================= */
+===================================================== */
 
 async function loadSheet(){
 
     try{
 
-        const response = await fetch(GOOGLE_URL);
+        const response =
+            await fetch(GOOGLE_URL);
+
 
         if(!response.ok){
-            throw new Error("Google Sheet could not be accessed.");
+
+            throw new Error(
+                "Google Sheet could not be accessed."
+            );
+
         }
 
-        const text = await response.text();
+
+        const text =
+            await response.text();
+
 
         /*
-           Google returns:
-           google.visualization.Query.setResponse({...})
+           Google Visualization response
+           extract JSON
         */
 
         const jsonText =
@@ -382,51 +575,86 @@ async function loadSheet(){
                 text.lastIndexOf("}") + 1
             );
 
-        const json = JSON.parse(jsonText);
 
-        const table = json.table;
+        const json =
+            JSON.parse(jsonText);
 
-        headers = table.cols.map(col =>
-            col.label || ""
-        );
 
-        allData = table.rows.map(row => {
+        const table =
+            json.table;
 
-            return row.c.map(cell => {
 
-                if(cell === null){
-                    return "";
-                }
+        /* HEADERS */
 
-                return cell.f || cell.v || "";
+        headers =
+            table.cols.map(
+                col => col.label || ""
+            );
+
+
+        /* DATA */
+
+        allData =
+            table.rows.map(row => {
+
+                return row.c.map(cell => {
+
+                    if(cell === null){
+
+                        return "";
+
+                    }
+
+                    return cell.f ||
+                           cell.v ||
+                           "";
+
+                });
 
             });
 
-        });
 
         /*
-           Remove completely empty rows
+           Remove empty rows
         */
 
-        allData = allData.filter(row =>
-            row.some(value =>
-                String(value).trim() !== ""
-            )
-        );
+        allData =
+            allData.filter(row =>
+                row.some(value =>
+                    String(value).trim() !== ""
+                )
+            );
 
+
+        /*
+           Setup filters
+        */
 
         setupFilters();
 
+
+        /*
+           Display complete data
+        */
+
         displayData(allData);
 
-        document.getElementById("loading").style.display =
-            "none";
 
-        document.getElementById("labTable").style.display =
-            "table";
+        document.getElementById(
+            "loading"
+        ).style.display = "none";
 
-        document.getElementById("status").innerText =
+
+        document.getElementById(
+            "labTable"
+        ).style.display = "table";
+
+
+        document.getElementById(
+            "status"
+        ).innerText =
             "Timetable loaded successfully";
+
 
     }
 
@@ -434,15 +662,33 @@ async function loadSheet(){
 
         console.error(error);
 
-        document.getElementById("loading").innerHTML = `
+
+        document.getElementById(
+            "loading"
+        ).innerHTML = `
+
             <div class="error">
-                <strong>Unable to load Google Sheet</strong>
+
+                <strong>
+                    Unable to load Google Sheet
+                </strong>
+
                 <br><br>
-                Please make sure the Google Sheet is shared as
-                <b>Anyone with the link → Viewer</b>.
+
+                Please make sure the Google Sheet is shared as:
+
                 <br><br>
-                Also check the Sheet name in the code.
+
+                <b>
+                    Anyone with the link → Viewer
+                </b>
+
+                <br><br>
+
+                Also check the Sheet tab name.
+
             </div>
+
         `;
 
     }
@@ -450,28 +696,38 @@ async function loadSheet(){
 }
 
 
-/* =========================================================
-   CREATE FILTERS
-========================================================= */
+/* =====================================================
+   SETUP FILTERS
+===================================================== */
 
 function setupFilters(){
 
+
     const dayFilter =
-        document.getElementById("dayFilter");
+        document.getElementById(
+            "dayFilter"
+        );
+
 
     const roomFilter =
-        document.getElementById("roomFilter");
+        document.getElementById(
+            "roomFilter"
+        );
+
 
     const capacityFilter =
-        document.getElementById("capacityFilter");
+        document.getElementById(
+            "capacityFilter"
+        );
+
 
     const periodFilter =
-        document.getElementById("periodFilter");
+        document.getElementById(
+            "periodFilter"
+        );
 
 
-    /*
-       Find columns automatically
-    */
+    /* ================= DAY ================= */
 
     const dayIndex =
         findColumn([
@@ -479,6 +735,40 @@ function setupFilters(){
             "DAY",
             "day"
         ]);
+
+
+    if(dayIndex !== -1){
+
+        const days =
+            uniqueValues(dayIndex);
+
+
+        days.forEach(day => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                day;
+
+
+            option.textContent =
+                day;
+
+
+            dayFilter.appendChild(
+                option
+            );
+
+        });
+
+    }
+
+
+    /* ================= ROOM ================= */
 
     const roomIndex =
         findColumn([
@@ -489,6 +779,40 @@ function setupFilters(){
             "ROOM"
         ]);
 
+
+    if(roomIndex !== -1){
+
+        const rooms =
+            uniqueValues(roomIndex);
+
+
+        rooms.forEach(room => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                room;
+
+
+            option.textContent =
+                room;
+
+
+            roomFilter.appendChild(
+                option
+            );
+
+        });
+
+    }
+
+
+    /* ================= CAPACITY ================= */
+
     const capacityIndex =
         findColumn([
             "Capacity",
@@ -497,123 +821,99 @@ function setupFilters(){
         ]);
 
 
-    /* DAYS */
-
-    if(dayIndex !== -1){
-
-        const days = uniqueValues(dayIndex);
-
-        days.forEach(day => {
-
-            const option =
-                document.createElement("option");
-
-            option.value = day;
-            option.textContent = day;
-
-            dayFilter.appendChild(option);
-
-        });
-
-    }
-
-
-    /* ROOMS */
-
-    if(roomIndex !== -1){
-
-        const rooms = uniqueValues(roomIndex);
-
-        rooms.forEach(room => {
-
-            const option =
-                document.createElement("option");
-
-            option.value = room;
-            option.textContent = room;
-
-            roomFilter.appendChild(option);
-
-        });
-
-    }
-
-
-    /* CAPACITIES */
-
     if(capacityIndex !== -1){
 
         const capacities =
-            uniqueValues(capacityIndex);
+            uniqueValues(
+                capacityIndex
+            );
 
-        capacities.sort((a,b) =>
-            Number(a) - Number(b)
+
+        capacities.sort(
+            (a,b) =>
+                Number(a) - Number(b)
         );
 
-        capacities.forEach(capacity => {
 
-            const option =
-                document.createElement("option");
+        capacities.forEach(
+            capacity => {
 
-            option.value = capacity;
-            option.textContent = capacity;
+                const option =
+                    document.createElement(
+                        "option"
+                    );
 
-            capacityFilter.appendChild(option);
 
-        });
+                option.value =
+                    capacity;
+
+
+                option.textContent =
+                    capacity;
+
+
+                capacityFilter.appendChild(
+                    option
+                );
+
+            }
+        );
 
     }
 
 
-    /*
-       PERIODS
-       Only add columns that actually exist
-    */
+    /* ================= PERIOD ================= */
 
     headers.forEach(header => {
 
         const cleanHeader =
             String(header).trim();
 
-        if(
-            periodNames.some(period =>
-                normalize(period) ===
-                normalize(cleanHeader)
-            )
-        ){
+
+        if(isPeriod(cleanHeader)){
 
             const option =
-                document.createElement("option");
+                document.createElement(
+                    "option"
+                );
 
-            option.value = cleanHeader;
 
-            option.textContent = cleanHeader;
+            option.value =
+                cleanHeader;
 
-            periodFilter.appendChild(option);
+
+            option.textContent =
+                cleanHeader;
+
+
+            periodFilter.appendChild(
+                option
+            );
 
         }
 
     });
 
 
-    /*
-       Filter events
-    */
+    /* ================= EVENTS ================= */
 
     dayFilter.addEventListener(
         "change",
         applyFilters
     );
 
+
     roomFilter.addEventListener(
         "change",
         applyFilters
     );
 
+
     capacityFilter.addEventListener(
         "change",
         applyFilters
     );
+
 
     periodFilter.addEventListener(
         "change",
@@ -623,116 +923,208 @@ function setupFilters(){
 }
 
 
-/* =========================================================
-   DISPLAY DATA
-========================================================= */
+/* =====================================================
+   PERIOD DETECTION
+===================================================== */
+
+function isPeriod(header){
+
+    const h =
+        normalize(header);
+
+
+    return (
+
+        h.includes("9.10-10.10") ||
+
+        h.includes("10.10-11.10") ||
+
+        h.includes("11.15-12.15") ||
+
+        h.includes("12.15-1.00") ||
+
+        h.includes("1.00-2.00") ||
+
+        h.includes("2.00-3.00") ||
+
+        h.includes("3.05-4.05")
+
+    );
+
+}
+
+
+/* =====================================================
+   DISPLAY TABLE
+===================================================== */
 
 function displayData(data){
 
+
     const tableHead =
-        document.getElementById("tableHead");
+        document.getElementById(
+            "tableHead"
+        );
+
 
     const tableBody =
-        document.getElementById("tableBody");
+        document.getElementById(
+            "tableBody"
+        );
 
 
     tableHead.innerHTML = "";
+
     tableBody.innerHTML = "";
 
 
-    /*
-       Header
-    */
+    /* ================= HEADER ================= */
 
     const headRow =
-        document.createElement("tr");
+        document.createElement(
+            "tr"
+        );
+
 
     headers.forEach(header => {
 
         const th =
-            document.createElement("th");
+            document.createElement(
+                "th"
+            );
 
-        th.textContent = header;
 
-        headRow.appendChild(th);
+        th.textContent =
+            header;
+
+
+        headRow.appendChild(
+            th
+        );
 
     });
 
-    tableHead.appendChild(headRow);
+
+    tableHead.appendChild(
+        headRow
+    );
 
 
-    /*
-       Rows
-    */
+    /* ================= DATA ================= */
 
     data.forEach(row => {
 
         const tr =
-            document.createElement("tr");
+            document.createElement(
+                "tr"
+            );
 
-        headers.forEach((header,index) => {
 
-            const td =
-                document.createElement("td");
+        headers.forEach(
+            (header,index) => {
 
-            const value =
-                row[index] || "";
+                const td =
+                    document.createElement(
+                        "td"
+                    );
 
-            td.textContent = value;
 
-            /*
-               FREE / BUSY styling
-            */
+                const value =
+                    row[index] || "";
 
-            if(isFree(value)){
-                td.classList.add("free");
+
+                td.textContent =
+                    value;
+
+
+                /*
+                   FREE
+                */
+
+                if(isFree(value)){
+
+                    td.classList.add(
+                        "free"
+                    );
+
+                }
+
+
+                /*
+                   FULL
+                */
+
+                else if(isFull(value)){
+
+                    td.classList.add(
+                        "full"
+                    );
+
+                }
+
+
+                /*
+                   OTHER
+                */
+
+                else{
+
+                    td.classList.add(
+                        "normal"
+                    );
+
+                }
+
+
+                tr.appendChild(
+                    td
+                );
+
             }
+        );
 
-            else if(
-                String(value)
-                    .trim()
-                    .toLowerCase() !== ""
-            ){
 
-                td.classList.add("busy");
-
-            }
-
-            tr.appendChild(td);
-
-        });
-
-        tableBody.appendChild(tr);
+        tableBody.appendChild(
+            tr
+        );
 
     });
 
-
-    /*
-       Count free labs
-    */
 
     countFreeLabs(data);
 
 }
 
 
-/* =========================================================
+/* =====================================================
    APPLY FILTERS
-========================================================= */
+===================================================== */
 
 function applyFilters(){
 
+
     const selectedDay =
-        document.getElementById("dayFilter").value;
+        document.getElementById(
+            "dayFilter"
+        ).value;
+
 
     const selectedRoom =
-        document.getElementById("roomFilter").value;
+        document.getElementById(
+            "roomFilter"
+        ).value;
+
 
     const selectedCapacity =
-        document.getElementById("capacityFilter").value;
+        document.getElementById(
+            "capacityFilter"
+        ).value;
+
 
     const selectedPeriod =
-        document.getElementById("periodFilter").value;
+        document.getElementById(
+            "periodFilter"
+        ).value;
 
 
     const dayIndex =
@@ -741,6 +1133,7 @@ function applyFilters(){
             "DAY",
             "day"
         ]);
+
 
     const roomIndex =
         findColumn([
@@ -751,6 +1144,7 @@ function applyFilters(){
             "ROOM"
         ]);
 
+
     const capacityIndex =
         findColumn([
             "Capacity",
@@ -759,23 +1153,37 @@ function applyFilters(){
         ]);
 
 
+    /*
+       DAY / ROOM / CAPACITY
+    */
+
     let filtered =
         allData.filter(row => {
 
+
             const dayMatch =
                 selectedDay === "ALL" ||
-                String(row[dayIndex]).trim() ===
+                String(
+                    row[dayIndex] || ""
+                ).trim() ===
                 selectedDay;
+
 
             const roomMatch =
                 selectedRoom === "ALL" ||
-                String(row[roomIndex]).trim() ===
+                String(
+                    row[roomIndex] || ""
+                ).trim() ===
                 selectedRoom;
+
 
             const capacityMatch =
                 selectedCapacity === "ALL" ||
-                String(row[capacityIndex]).trim() ===
+                String(
+                    row[capacityIndex] || ""
+                ).trim() ===
                 selectedCapacity;
+
 
             return (
                 dayMatch &&
@@ -787,21 +1195,28 @@ function applyFilters(){
 
 
     /*
-       IMPORTANT:
-       If a period is selected,
-       show ONLY FREE labs.
+       PERIOD SELECTED
+
+       Show ONLY FREE labs
     */
 
     if(selectedPeriod !== "ALL"){
 
+
         const periodIndex =
-            findExactColumn(selectedPeriod);
+            findExactColumn(
+                selectedPeriod
+            );
+
 
         if(periodIndex !== -1){
 
             filtered =
-                filtered.filter(row =>
-                    isFree(row[periodIndex])
+                filtered.filter(
+                    row =>
+                        isFree(
+                            row[periodIndex]
+                        )
                 );
 
         }
@@ -812,25 +1227,31 @@ function applyFilters(){
     displayData(filtered);
 
 
-    document.getElementById("status").innerText =
+    document.getElementById(
+        "status"
+    ).innerText =
         filtered.length +
         " lab records found";
 
 }
 
 
-/* =========================================================
-   FREE LAB DETECTION
-========================================================= */
+/* =====================================================
+   FREE DETECTION
+===================================================== */
 
 function isFree(value){
 
-    if(value === null ||
-       value === undefined){
+
+    if(
+        value === null ||
+        value === undefined
+    ){
 
         return true;
 
     }
+
 
     const text =
         String(value)
@@ -839,58 +1260,106 @@ function isFree(value){
 
 
     /*
-       Empty cell = FREE
+       Empty = FREE
     */
 
     if(text === ""){
+
         return true;
+
     }
 
 
-    /*
-       Common FREE values
-    */
+    return (
 
-    const freeValues = [
-        "free",
-        "available",
-        "vacant",
-        "idle",
-        "-",
-        "--",
-        "0"
-    ];
+        text === "free" ||
 
+        text === "available" ||
 
-    return freeValues.includes(text);
+        text === "vacant" ||
+
+        text === "idle"
+
+    );
 
 }
 
 
-/* =========================================================
+/* =====================================================
+   FULL DETECTION
+===================================================== */
+
+function isFull(value){
+
+
+    if(
+        value === null ||
+        value === undefined
+    ){
+
+        return false;
+
+    }
+
+
+    const text =
+        String(value)
+            .trim()
+            .toLowerCase();
+
+
+    return (
+
+        text === "full" ||
+
+        text === "occupied" ||
+
+        text === "busy"
+
+    );
+
+}
+
+
+/* =====================================================
    COUNT FREE LABS
-========================================================= */
+===================================================== */
 
 function countFreeLabs(data){
 
-    const period =
-        document.getElementById("periodFilter").value;
+
+    const selectedPeriod =
+        document.getElementById(
+            "periodFilter"
+        ).value;
 
 
     let count = 0;
 
 
-    if(period !== "ALL"){
+    if(
+        selectedPeriod !== "ALL"
+    ){
+
 
         const index =
-            findExactColumn(period);
+            findExactColumn(
+                selectedPeriod
+            );
+
 
         if(index !== -1){
 
             data.forEach(row => {
 
-                if(isFree(row[index])){
+                if(
+                    isFree(
+                        row[index]
+                    )
+                ){
+
                     count++;
+
                 }
 
             });
@@ -901,37 +1370,90 @@ function countFreeLabs(data){
 
     else{
 
-        /*
-           When all periods selected,
-           count records available.
-        */
-
-        count = data.length;
+        count =
+            data.length;
 
     }
 
 
-    document.getElementById("freeCount").innerText =
+    document.getElementById(
+        "freeCount"
+    ).innerText =
         "Free Labs: " + count;
 
 }
 
 
-/* =========================================================
+/* =====================================================
+   RESET FILTERS
+===================================================== */
+
+function resetFilters(){
+
+
+    document.getElementById(
+        "dayFilter"
+    ).value = "ALL";
+
+
+    document.getElementById(
+        "roomFilter"
+    ).value = "ALL";
+
+
+    document.getElementById(
+        "capacityFilter"
+    ).value = "ALL";
+
+
+    document.getElementById(
+        "periodFilter"
+    ).value = "ALL";
+
+
+    /*
+       Show all data
+    */
+
+    displayData(
+        allData
+    );
+
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "Showing all lab records";
+
+}
+
+
+/* =====================================================
    FIND COLUMN
-========================================================= */
+===================================================== */
 
 function findColumn(names){
 
-    for(let i=0;i<headers.length;i++){
+
+    for(
+        let i = 0;
+        i < headers.length;
+        i++
+    ){
 
         const header =
-            normalize(headers[i]);
+            normalize(
+                headers[i]
+            );
 
-        for(const name of names){
+
+        for(
+            const name of names
+        ){
 
             if(
-                header === normalize(name)
+                header ===
+                normalize(name)
             ){
 
                 return i;
@@ -942,21 +1464,29 @@ function findColumn(names){
 
     }
 
+
     return -1;
 
 }
 
 
-/* =========================================================
-   EXACT PERIOD COLUMN
-========================================================= */
+/* =====================================================
+   EXACT COLUMN
+===================================================== */
 
 function findExactColumn(name){
 
-    for(let i=0;i<headers.length;i++){
+
+    for(
+        let i = 0;
+        i < headers.length;
+        i++
+    ){
 
         if(
-            normalize(headers[i]) ===
+            normalize(
+                headers[i]
+            ) ===
             normalize(name)
         ){
 
@@ -966,50 +1496,60 @@ function findExactColumn(name){
 
     }
 
+
     return -1;
 
 }
 
 
-/* =========================================================
-   NORMALIZE TEXT
-========================================================= */
+/* =====================================================
+   NORMALIZE
+===================================================== */
 
 function normalize(value){
 
-    return String(value || "")
-        .toLowerCase()
-        .replace(/\s+/g,"")
-        .replace(/[–—]/g,"-")
-        .trim();
+    return String(
+        value || ""
+    )
+    .toLowerCase()
+    .replace(/\s+/g,"")
+    .replace(/[–—]/g,"-")
+    .trim();
 
 }
 
 
-/* =========================================================
+/* =====================================================
    UNIQUE VALUES
-========================================================= */
+===================================================== */
 
 function uniqueValues(index){
 
+
     const values =
         allData
-            .map(row =>
-                String(row[index] || "").trim()
+            .map(
+                row =>
+                    String(
+                        row[index] || ""
+                    ).trim()
             )
-            .filter(value =>
-                value !== ""
+            .filter(
+                value =>
+                    value !== ""
             );
 
 
-    return [...new Set(values)];
+    return [
+        ...new Set(values)
+    ];
 
 }
 
 
-/* =========================================================
-   START
-========================================================= */
+/* =====================================================
+   START WEBSITE
+===================================================== */
 
 loadSheet();
 

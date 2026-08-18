@@ -1588,45 +1588,39 @@ function checkCapacityRange(
 
 
     if(
-        range === "BELOW_60"
+        range === "BELOW_50"
     ){
 
-        return capacity < 60;
+        return capacity < 50;
 
     }
 
 
     if(
-        range === "60_80"
+        range === "51_70"
     ){
 
         return (
-            capacity >= 60 &&
-            capacity <= 80
+            capacity >= 51 &&
+            capacity <= 70
         );
 
     }
 
 
     if(
-        range === "81_100"
+        range === "71_100"
     ){
 
         return (
-            capacity >= 81 &&
+            capacity >= 71 &&
             capacity <= 100
         );
 
     }
 
 
-    if(
-        range === "ABOVE_100"
-    ){
-
-        return capacity > 100;
-
-    }
+    
 
 
     return true;
